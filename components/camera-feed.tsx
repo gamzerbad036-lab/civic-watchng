@@ -90,12 +90,50 @@ function drawDetectionBox(
   ctx.textAlign = "left"
   ctx.fillText(labelText, bx + 3, by - 2.5)
 
-  // Face tracking reticle for persons (NO blurring, just identification reticle)
+  // Face blur + tracking reticle for persons
   if (det.type === "person" && det.faceVisible) {
     const faceX = bx + bw / 2
     const faceY = by + bh * 0.15
-    const faceR = Math.min(6, bw * 0.15)
+    const faceR = Math.min(8, bw * 0.18)
 
+    // Pixelated face blur effect
+    const blurSize = Math.max(2, Math.floor(faceR * 2.2))
+    const blurX = Math.floor(faceX - blurSize / 2)
+    const blurY = Math.floor(faceY - blurSize / 2)
+    const safeBlurX = Math.max(0, Math.min(blurX, width - blurSize))
+    const safeBlurY = Math.max(0, Math.min(blurY, height - blurSize))
+    const safeBlurW = Math.min(blurSize, width - safeBlurX)
+    const safeBlurH = Math.min(blurSize, height - safeBlurY)
+
+    if (safeBlurW > 0 && safeBlurH > 0) {
+      try {
+        const faceData = ctx.getImageData(safeBlurX, safeBlurY, safeBlurW, safeBlurH)
+        const pixelSize = Math.max(2, Math.floor(blurSize / 3))
+        for (let py = 0; py < safeBlurH; py += pixelSize) {
+          for (let px = 0; px < safeBlurW; px += pixelSize) {
+            const i = (py * safeBlurW + px) * 4
+            const r = faceData.data[i] || 0
+            const g = faceData.data[i + 1] || 0
+            const b = faceData.data[i + 2] || 0
+            for (let dy = 0; dy < pixelSize && py + dy < safeBlurH; dy++) {
+              for (let dx = 0; dx < pixelSize && px + dx < safeBlurW; dx++) {
+                const j = ((py + dy) * safeBlurW + (px + dx)) * 4
+                faceData.data[j] = r
+                faceData.data[j + 1] = g
+                faceData.data[j + 2] = b
+              }
+            }
+          }
+        }
+        ctx.putImageData(faceData, safeBlurX, safeBlurY)
+      } catch (_e) {
+        // Fallback: draw a solid blur rectangle
+        ctx.fillStyle = "rgba(30, 40, 50, 0.85)"
+        ctx.fillRect(safeBlurX, safeBlurY, safeBlurW, safeBlurH)
+      }
+    }
+
+    // Blur boundary ring
     ctx.strokeStyle = "#22d3ee"
     ctx.lineWidth = 1
     ctx.beginPath()
@@ -115,14 +153,14 @@ function drawDetectionBox(
     ctx.lineTo(faceX, faceY + faceR + cLen)
     ctx.stroke()
 
-    // Face ID label
+    // Face ID label with MASKED indicator
     if (det.faceId) {
       ctx.fillStyle = "#22d3eeCC"
-      const idText = det.faceId
+      const idText = `${det.faceId} [MASKED]`
+      ctx.font = "bold 5px monospace"
       const idWidth = ctx.measureText(idText).width + 4
       ctx.fillRect(faceX + faceR + 2, faceY - 4, idWidth, 8)
       ctx.fillStyle = "#fff"
-      ctx.font = "bold 5px monospace"
       ctx.fillText(idText, faceX + faceR + 4, faceY + 2)
     }
   }

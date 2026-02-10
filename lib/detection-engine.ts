@@ -183,7 +183,7 @@ export const cameraDetections: Record<string, DetectedObject[]> = {
     },
   ],
 
-  // CAM-003: Lobby Central - Reception desk, 2 people at desk, 2 more walking
+  // CAM-003: Building Entrance - Front courtyard, people approaching entrance
   "cam-003": [
     {
       id: "det-003-1",
@@ -195,7 +195,7 @@ export const cameraDetections: Record<string, DetectedObject[]> = {
       tracked: false,
       faceVisible: true,
       faceId: "EMP-0156",
-      activity: "Standing at reception desk",
+      activity: "Standing at entrance checkpoint",
       isBlurred: true,
     },
     {
@@ -208,7 +208,7 @@ export const cameraDetections: Record<string, DetectedObject[]> = {
       tracked: true,
       faceVisible: true,
       faceId: "VIS-0847", // Same visitor from cam-002
-      activity: "Checking in at reception",
+      activity: "Walking toward building entrance",
       isBlurred: true,
     },
     {
@@ -221,7 +221,7 @@ export const cameraDetections: Record<string, DetectedObject[]> = {
       tracked: true,
       faceVisible: true,
       faceId: "VIS-0848", // Same visitor from cam-002
-      activity: "Waiting at reception",
+      activity: "Waiting in courtyard area",
       isBlurred: true,
     },
     {
@@ -234,7 +234,7 @@ export const cameraDetections: Record<string, DetectedObject[]> = {
       tracked: false,
       faceVisible: true,
       faceId: "EMP-0234",
-      activity: "Walking through lobby",
+      activity: "Walking across courtyard",
       isBlurred: true,
     },
     {
@@ -246,14 +246,14 @@ export const cameraDetections: Record<string, DetectedObject[]> = {
       color: "#ef4444",
       tracked: false,
       faceVisible: false,
-      activity: "Stationary on lobby floor",
+      activity: "Stationary on courtyard ground",
     },
   ],
 
-  // CAM-004: Corridor L2 - Maintenance mode, empty hallway, no people
+  // CAM-004: Walkway B2 - Maintenance mode, empty outdoor walkway, no people
   "cam-004": [],
 
-  // CAM-005: Server Room - One person in dark clothing near server rack
+  // CAM-005: Utility Enclosure - One person in dark clothing near equipment
   "cam-005": [
     {
       id: "det-005-1",
@@ -265,7 +265,7 @@ export const cameraDetections: Record<string, DetectedObject[]> = {
       tracked: true,
       faceVisible: true,
       faceId: "UNK-0001",
-      activity: "Accessing server rack - FLAGGED",
+      activity: "Accessing utility equipment - FLAGGED",
       isBlurred: true,
     },
     {
@@ -395,31 +395,31 @@ export const cameraDetections: Record<string, DetectedObject[]> = {
     },
   ],
 
-  // CAM-010: Reception Hall - Counter with staff, visitors seated, potted plants
+  // CAM-010: Visitor Pavilion - Outdoor covered area with visitors, staff
   "cam-010": [
     {
       id: "det-010-1",
       type: "person",
-      label: "Reception Staff A",
+      label: "Pavilion Staff A",
       confidence: 0.97,
       bbox: { x: 0.38, y: 0.25, w: 0.06, h: 0.22 },
       color: "#10b981",
       tracked: false,
       faceVisible: true,
       faceId: "EMP-0156",
-      activity: "Seated at reception counter",
+      activity: "Standing at outdoor pavilion desk",
     },
     {
       id: "det-010-2",
       type: "person",
-      label: "Reception Staff B",
+      label: "Pavilion Staff B",
       confidence: 0.95,
       bbox: { x: 0.48, y: 0.26, w: 0.06, h: 0.22 },
       color: "#10b981",
       tracked: false,
       faceVisible: true,
       faceId: "EMP-0178",
-      activity: "Seated at reception counter",
+      activity: "Standing at outdoor pavilion desk",
     },
     {
       id: "det-010-3",
@@ -431,7 +431,7 @@ export const cameraDetections: Record<string, DetectedObject[]> = {
       tracked: true,
       faceVisible: true,
       faceId: "VIS-0847", // Same visitor tracked from cam-002 -> cam-003 -> cam-010
-      activity: "Seated in waiting area",
+      activity: "Seated under outdoor canopy",
     },
     {
       id: "det-010-4",
@@ -443,7 +443,7 @@ export const cameraDetections: Record<string, DetectedObject[]> = {
       tracked: true,
       faceVisible: true,
       faceId: "VIS-0848", // Same visitor tracked
-      activity: "Seated in waiting area",
+      activity: "Seated under outdoor canopy",
     },
     {
       id: "det-010-5",
@@ -455,7 +455,7 @@ export const cameraDetections: Record<string, DetectedObject[]> = {
       tracked: false,
       faceVisible: true,
       faceId: "VIS-0851",
-      activity: "Standing near entrance",
+      activity: "Standing on pathway near pavilion",
     },
   ],
 
@@ -499,7 +499,7 @@ export const cameraDetections: Record<string, DetectedObject[]> = {
     },
   ],
 
-  // CAM-012: Generator Room - One maintenance technician, industrial equipment, no vehicles
+  // CAM-012: Generator Yard - Outdoor utility area, maintenance technician, industrial equipment
   "cam-012": [
     {
       id: "det-012-1",
@@ -511,7 +511,7 @@ export const cameraDetections: Record<string, DetectedObject[]> = {
       tracked: false,
       faceVisible: true,
       faceId: "EMP-0512",
-      activity: "Inspecting generator equipment",
+      activity: "Inspecting outdoor generator equipment",
     },
     {
       id: "det-012-2",

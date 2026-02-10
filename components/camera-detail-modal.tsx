@@ -136,12 +136,50 @@ function drawDetectionBoxExpanded(
   ctx.textAlign = "left"
   ctx.fillText(labelText, bx + 5, by - 5)
 
-  // Face tracking reticle (NO blurring - just identification)
+  // Face blur + tracking reticle for persons
   if (det.type === "person" && det.faceVisible) {
     const faceX = bx + bw / 2
     const faceY = by + bh * 0.15
     const faceR = Math.min(14, bw * 0.18)
 
+    // Pixelated face blur effect
+    const blurSize = Math.max(4, Math.floor(faceR * 2.5))
+    const blurX = Math.floor(faceX - blurSize / 2)
+    const blurY = Math.floor(faceY - blurSize / 2)
+    const safeBlurX = Math.max(0, Math.min(blurX, width - blurSize))
+    const safeBlurY = Math.max(0, Math.min(blurY, height - blurSize))
+    const safeBlurW = Math.min(blurSize, width - safeBlurX)
+    const safeBlurH = Math.min(blurSize, height - safeBlurY)
+
+    if (safeBlurW > 0 && safeBlurH > 0) {
+      try {
+        const faceData = ctx.getImageData(safeBlurX, safeBlurY, safeBlurW, safeBlurH)
+        const pixelSize = Math.max(3, Math.floor(blurSize / 4))
+        for (let py = 0; py < safeBlurH; py += pixelSize) {
+          for (let px = 0; px < safeBlurW; px += pixelSize) {
+            const i = (py * safeBlurW + px) * 4
+            const r = faceData.data[i] || 0
+            const g = faceData.data[i + 1] || 0
+            const b = faceData.data[i + 2] || 0
+            for (let dy = 0; dy < pixelSize && py + dy < safeBlurH; dy++) {
+              for (let dx = 0; dx < pixelSize && px + dx < safeBlurW; dx++) {
+                const j = ((py + dy) * safeBlurW + (px + dx)) * 4
+                faceData.data[j] = r
+                faceData.data[j + 1] = g
+                faceData.data[j + 2] = b
+              }
+            }
+          }
+        }
+        ctx.putImageData(faceData, safeBlurX, safeBlurY)
+      } catch (_e) {
+        // Fallback: draw a solid blur rectangle
+        ctx.fillStyle = "rgba(30, 40, 50, 0.85)"
+        ctx.fillRect(safeBlurX, safeBlurY, safeBlurW, safeBlurH)
+      }
+    }
+
+    // Blur boundary ring
     ctx.strokeStyle = "#22d3ee"
     ctx.lineWidth = 1.5
     ctx.beginPath()
@@ -161,10 +199,10 @@ function drawDetectionBoxExpanded(
     ctx.lineTo(faceX, faceY + faceR + cLen)
     ctx.stroke()
 
-    // Face ID badge
+    // Face ID badge with MASKED indicator
     if (det.faceId) {
       ctx.fillStyle = "#22d3eeDD"
-      const idText = det.faceId
+      const idText = `${det.faceId} [MASKED]`
       ctx.font = "bold 9px monospace"
       const idWidth = ctx.measureText(idText).width + 8
       ctx.fillRect(faceX + faceR + 4, faceY - 7, idWidth, 14)
@@ -826,7 +864,7 @@ export function CameraDetailModal({ camera, masked, open, onOpenChange }: Camera
                         { label: "Encoding", value: "H.265/HEVC" },
                         { label: "Storage", value: "30 days retention" },
                         { label: "Encryption", value: "AES-256" },
-                        { label: "Face Blur", value: "DISABLED (Faces Visible)" },
+                        { label: "Face Blur", value: "ACTIVE (Privacy Protected)" },
                         { label: "Vehicle Track", value: "ACTIVE (Cross-Camera)" },
                         { label: "License Plate", value: "ZOOM-ENHANCED" },
                       ].map(({ label, value }) => (
@@ -846,8 +884,8 @@ export function CameraDetailModal({ camera, masked, open, onOpenChange }: Camera
                         <div className="flex items-center gap-2">
                           <Shield className="h-4 w-4 text-primary" />
                           <div>
-                            <p className="text-[11px] font-medium text-primary">Advanced Tracking Active</p>
-                            <p className="text-[10px] text-muted-foreground">Cross-camera vehicle & face tracking enabled. No face blurring applied.</p>
+                            <p className="text-[11px] font-medium text-primary">Privacy-First Tracking Active</p>
+                            <p className="text-[10px] text-muted-foreground">Cross-camera vehicle & face tracking enabled. All faces are pixelated by default to protect identities.</p>
                           </div>
                         </div>
                       </div>
