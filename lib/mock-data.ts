@@ -1,0 +1,113 @@
+import type { Camera, Incident, AuditLogEntry, RevealRequest, CameraActivity } from "./types"
+
+export const cameras: Camera[] = [
+  { id: "cam-001", name: "Main Gate A", location: "North Entrance", status: "online", lat: 9.0579, lng: 7.4951, zone: "Zone A" },
+  { id: "cam-002", name: "Parking Lot B", location: "East Wing", status: "online", lat: 9.0585, lng: 7.4960, zone: "Zone A" },
+  { id: "cam-003", name: "Lobby Central", location: "Main Building", status: "online", lat: 9.0570, lng: 7.4945, zone: "Zone B" },
+  { id: "cam-004", name: "Corridor L2", location: "Second Floor", status: "maintenance", lat: 9.0575, lng: 7.4938, zone: "Zone B" },
+  { id: "cam-005", name: "Server Room", location: "Basement", status: "online", lat: 9.0568, lng: 7.4955, zone: "Zone C" },
+  { id: "cam-006", name: "Perimeter South", location: "South Fence", status: "online", lat: 9.0560, lng: 7.4948, zone: "Zone C" },
+  { id: "cam-007", name: "Emergency Exit C", location: "West Wing", status: "offline", lat: 9.0582, lng: 7.4935, zone: "Zone D" },
+  { id: "cam-008", name: "Rooftop Array", location: "Building Top", status: "online", lat: 9.0590, lng: 7.4942, zone: "Zone D" },
+  { id: "cam-009", name: "Loading Bay", location: "Rear Entrance", status: "online", lat: 9.0565, lng: 7.4965, zone: "Zone A" },
+  { id: "cam-010", name: "Reception Hall", location: "Ground Floor", status: "online", lat: 9.0573, lng: 7.4952, zone: "Zone B" },
+  { id: "cam-011", name: "Staff Quarters", location: "Annex Building", status: "online", lat: 9.0555, lng: 7.4940, zone: "Zone C" },
+  { id: "cam-012", name: "Generator Room", location: "Utility Block", status: "online", lat: 9.0562, lng: 7.4930, zone: "Zone D" },
+]
+
+export const incidents: Incident[] = [
+  { id: "inc-001", type: "motion", severity: "low", cameraId: "cam-001", cameraName: "Main Gate A", description: "Unusual motion detected near entrance after hours", timestamp: "2026-02-06T14:23:00Z", status: "active" },
+  { id: "inc-002", type: "anomaly", severity: "high", cameraId: "cam-005", cameraName: "Server Room", description: "Anomalous activity in restricted server area", timestamp: "2026-02-06T13:45:00Z", status: "active" },
+  { id: "inc-003", type: "intrusion", severity: "critical", cameraId: "cam-006", cameraName: "Perimeter South", description: "Perimeter breach detected at south fence line", timestamp: "2026-02-06T12:30:00Z", status: "acknowledged" },
+  { id: "inc-004", type: "system", severity: "medium", cameraId: "cam-007", cameraName: "Emergency Exit C", description: "Camera feed interruption - possible tampering", timestamp: "2026-02-06T11:15:00Z", status: "active" },
+  { id: "inc-005", type: "motion", severity: "low", cameraId: "cam-009", cameraName: "Loading Bay", description: "Scheduled delivery vehicle arrived", timestamp: "2026-02-06T10:00:00Z", status: "resolved" },
+  { id: "inc-006", type: "anomaly", severity: "medium", cameraId: "cam-003", cameraName: "Lobby Central", description: "Unidentified package left in lobby area", timestamp: "2026-02-06T09:30:00Z", status: "acknowledged" },
+]
+
+export const auditLogs: AuditLogEntry[] = [
+  { id: "log-001", action: "Mode Switch", user: "madeena.umar@civicwatch.ng", mode: "investigation", details: "Switched to Investigation Mode for Case #CW-2026-0042", timestamp: "2026-02-06T14:30:00Z", caseId: "CW-2026-0042", ipAddress: "192.168.1.100", result: "success" },
+  { id: "log-002", action: "Identity Reveal Request", user: "madeena.umar@civicwatch.ng", mode: "authorized-reveal", details: "Requested identity reveal on cam-005 footage for Case #CW-2026-0042", timestamp: "2026-02-06T14:25:00Z", caseId: "CW-2026-0042", ipAddress: "192.168.1.100", result: "success" },
+  { id: "log-003", action: "Feed Access", user: "madeena.umar@civicwatch.ng", mode: "monitoring", details: "Accessed live feed from Perimeter South camera", timestamp: "2026-02-06T13:00:00Z", ipAddress: "192.168.1.100", result: "success" },
+  { id: "log-004", action: "Reveal Expired", user: "system", mode: "authorized-reveal", details: "Auto re-masking applied after reveal duration expired on cam-003", timestamp: "2026-02-06T12:00:00Z", caseId: "CW-2026-0038", ipAddress: "system", result: "expired" },
+  { id: "log-005", action: "Emergency Override", user: "madeena.umar@civicwatch.ng", mode: "emergency", details: "Emergency mode activated - MFA verified", timestamp: "2026-02-06T11:30:00Z", caseId: "CW-2026-0040", ipAddress: "192.168.1.100", result: "success" },
+  { id: "log-006", action: "Login", user: "madeena.umar@civicwatch.ng", mode: "monitoring", details: "Successful authentication with MFA", timestamp: "2026-02-06T09:00:00Z", ipAddress: "192.168.1.100", result: "success" },
+  { id: "log-007", action: "Unauthorized Access Attempt", user: "unknown", mode: "monitoring", details: "Failed login attempt from unknown IP", timestamp: "2026-02-06T08:45:00Z", ipAddress: "10.0.0.55", result: "denied" },
+  { id: "log-008", action: "Identity Reveal Request", user: "madeena.umar@civicwatch.ng", mode: "authorized-reveal", details: "Requested reveal denied - insufficient justification for cam-010", timestamp: "2026-02-06T08:30:00Z", caseId: "CW-2026-0035", ipAddress: "192.168.1.100", result: "denied" },
+]
+
+export const revealRequests: RevealRequest[] = [
+  { id: "rev-001", cameraId: "cam-005", cameraName: "Server Room", reason: "Investigating unauthorized access to server room after hours. Suspect captured on masked footage.", caseId: "CW-2026-0042", duration: 30, status: "active", requestedAt: "2026-02-06T14:25:00Z", expiresAt: "2026-02-06T14:55:00Z", requestedBy: "madeena.umar@civicwatch.ng" },
+  { id: "rev-002", cameraId: "cam-006", cameraName: "Perimeter South", reason: "Perimeter breach investigation - identify intruder for law enforcement handoff.", caseId: "CW-2026-0041", duration: 60, status: "pending", requestedAt: "2026-02-06T13:00:00Z", requestedBy: "madeena.umar@civicwatch.ng" },
+  { id: "rev-003", cameraId: "cam-003", cameraName: "Lobby Central", reason: "Package identification for security clearance verification.", caseId: "CW-2026-0038", duration: 15, status: "expired", requestedAt: "2026-02-06T11:45:00Z", expiresAt: "2026-02-06T12:00:00Z", requestedBy: "madeena.umar@civicwatch.ng" },
+]
+
+// Camera Activity Data - detailed per-camera activity logs
+export const cameraActivities: Record<string, CameraActivity[]> = {
+  "cam-001": [
+    { id: "act-001-1", cameraId: "cam-001", timestamp: "2026-02-06T14:45:00Z", type: "person_entry", description: "Staff member entered via main gate", confidence: 98, personCount: 1, zone: "Zone A" },
+    { id: "act-001-2", cameraId: "cam-001", timestamp: "2026-02-06T14:22:00Z", type: "person_entry", description: "Visitor arrival - credential check in progress", confidence: 95, personCount: 1, faceMatches: ["VIS-0847"] },
+    { id: "act-001-3", cameraId: "cam-001", timestamp: "2026-02-06T13:58:00Z", type: "vehicle", description: "Official vehicle passed through checkpoint", confidence: 99, zone: "Zone A" },
+    { id: "act-001-4", cameraId: "cam-001", timestamp: "2026-02-06T13:15:00Z", type: "person_exit", description: "Staff departure confirmed", confidence: 97, personCount: 1 },
+    { id: "act-001-5", cameraId: "cam-001", timestamp: "2026-02-06T12:30:00Z", type: "anomaly", description: "Unusual loitering detected - cleared after 2 minutes", confidence: 92, zone: "Zone A" },
+    { id: "act-001-6", cameraId: "cam-001", timestamp: "2026-02-06T11:45:00Z", type: "person_entry", description: "Morning shift staff arrival", confidence: 96, personCount: 3 },
+  ],
+  "cam-002": [
+    { id: "act-002-1", cameraId: "cam-002", timestamp: "2026-02-06T14:52:00Z", type: "vehicle", description: "Vehicle parked in designated area", confidence: 97, zone: "Zone A" },
+    { id: "act-002-2", cameraId: "cam-002", timestamp: "2026-02-06T14:10:00Z", type: "person_entry", description: "Person entered from parking lot", confidence: 94, personCount: 1 },
+    { id: "act-002-3", cameraId: "cam-002", timestamp: "2026-02-06T13:32:00Z", type: "vehicle", description: "Delivery vehicle left parking lot", confidence: 98, zone: "Zone A" },
+    { id: "act-002-4", cameraId: "cam-002", timestamp: "2026-02-06T12:05:00Z", type: "person_exit", description: "Staff member left building via parking exit", confidence: 96, personCount: 1 },
+    { id: "act-002-5", cameraId: "cam-002", timestamp: "2026-02-06T11:20:00Z", type: "vehicle", description: "Morning vehicle arrivals - 4 vehicles", confidence: 99, zone: "Zone A" },
+  ],
+  "cam-003": [
+    { id: "act-003-1", cameraId: "cam-003", timestamp: "2026-02-06T14:48:00Z", type: "person_entry", description: "Lobby reception - visitor check-in", confidence: 96, personCount: 2, faceMatches: ["VIS-0847", "VIS-0848"] },
+    { id: "act-003-2", cameraId: "cam-003", timestamp: "2026-02-06T14:15:00Z", type: "package", description: "Package delivered to main reception", confidence: 93, zone: "Zone B" },
+    { id: "act-003-3", cameraId: "cam-003", timestamp: "2026-02-06T13:40:00Z", type: "person_exit", description: "Multiple staff exiting for lunch break", confidence: 97, personCount: 5 },
+    { id: "act-003-4", cameraId: "cam-003", timestamp: "2026-02-06T12:55:00Z", type: "anomaly", description: "Unattended package alert - staff responded", confidence: 88, zone: "Zone B" },
+    { id: "act-003-5", cameraId: "cam-003", timestamp: "2026-02-06T11:30:00Z", type: "person_entry", description: "Morning lobby traffic - facility opening", confidence: 98, personCount: 8 },
+  ],
+  "cam-004": [
+    { id: "act-004-1", cameraId: "cam-004", timestamp: "2026-02-06T14:30:00Z", type: "system_event", description: "Camera maintenance mode - live feed unavailable", confidence: 100, zone: "Zone B" },
+    { id: "act-004-2", cameraId: "cam-004", timestamp: "2026-02-06T10:00:00Z", type: "person_entry", description: "Staff access to second floor corridor", confidence: 95, personCount: 2 },
+  ],
+  "cam-005": [
+    { id: "act-005-1", cameraId: "cam-005", timestamp: "2026-02-06T14:25:00Z", type: "anomaly", description: "Unauthorized access attempt - logged and flagged", confidence: 99, zone: "Zone C" },
+    { id: "act-005-2", cameraId: "cam-005", timestamp: "2026-02-06T13:42:00Z", type: "person_entry", description: "Authorized personnel entered server room", confidence: 98, personCount: 1, faceMatches: ["EMP-0234"] },
+    { id: "act-005-3", cameraId: "cam-005", timestamp: "2026-02-06T13:00:00Z", type: "system_event", description: "Routine system audit - no issues detected", confidence: 100 },
+    { id: "act-005-4", cameraId: "cam-005", timestamp: "2026-02-06T11:50:00Z", type: "person_exit", description: "Maintenance personnel departed", confidence: 96, personCount: 1 },
+  ],
+  "cam-006": [
+    { id: "act-006-1", cameraId: "cam-006", timestamp: "2026-02-06T12:30:00Z", type: "intrusion", description: "Perimeter breach detected - intruder on fence line", confidence: 96, zone: "Zone C" },
+    { id: "act-006-2", cameraId: "cam-006", timestamp: "2026-02-06T11:15:00Z", type: "anomaly", description: "Unusual movement along perimeter fence", confidence: 91, zone: "Zone C" },
+    { id: "act-006-3", cameraId: "cam-006", timestamp: "2026-02-06T09:30:00Z", type: "system_event", description: "Perimeter system check - all zones clear", confidence: 100, zone: "Zone C" },
+  ],
+  "cam-007": [
+    { id: "act-007-1", cameraId: "cam-007", timestamp: "2026-02-06T11:15:00Z", type: "system_event", description: "Camera feed interruption - possible tampering", confidence: 85, zone: "Zone D" },
+  ],
+  "cam-008": [
+    { id: "act-008-1", cameraId: "cam-008", timestamp: "2026-02-06T14:50:00Z", type: "system_event", description: "Rooftop perimeter scan - no threats detected", confidence: 99, zone: "Zone D" },
+    { id: "act-008-2", cameraId: "cam-008", timestamp: "2026-02-06T13:20:00Z", type: "anomaly", description: "Unusual bird activity - false positive cleared", confidence: 45, zone: "Zone D" },
+    { id: "act-008-3", cameraId: "cam-008", timestamp: "2026-02-06T10:00:00Z", type: "system_event", description: "Daily rooftop inspection completed", confidence: 100, zone: "Zone D" },
+  ],
+  "cam-009": [
+    { id: "act-009-1", cameraId: "cam-009", timestamp: "2026-02-06T14:35:00Z", type: "vehicle", description: "Delivery truck at loading bay", confidence: 98, zone: "Zone A" },
+    { id: "act-009-2", cameraId: "cam-009", timestamp: "2026-02-06T13:50:00Z", type: "person_entry", description: "Warehouse staff confirmed at loading bay", confidence: 97, personCount: 2 },
+    { id: "act-009-3", cameraId: "cam-009", timestamp: "2026-02-06T12:00:00Z", type: "package", description: "Scheduled delivery arrived - 5 packages", confidence: 96, zone: "Zone A" },
+    { id: "act-009-4", cameraId: "cam-009", timestamp: "2026-02-06T10:15:00Z", type: "person_exit", description: "Staff departure from loading bay", confidence: 94, personCount: 2 },
+  ],
+  "cam-010": [
+    { id: "act-010-1", cameraId: "cam-010", timestamp: "2026-02-06T14:40:00Z", type: "person_entry", description: "Reception staff at desk", confidence: 98, personCount: 2, zone: "Zone B" },
+    { id: "act-010-2", cameraId: "cam-010", timestamp: "2026-02-06T14:05:00Z", type: "package", description: "Package placed at reception counter", confidence: 94, zone: "Zone B" },
+    { id: "act-010-3", cameraId: "cam-010", timestamp: "2026-02-06T13:15:00Z", type: "person_entry", description: "Multiple visitors arriving", confidence: 96, personCount: 4, faceMatches: ["VIS-0847", "VIS-0848"] },
+    { id: "act-010-4", cameraId: "cam-010", timestamp: "2026-02-06T11:00:00Z", type: "person_entry", description: "Morning reception staffing", confidence: 99, personCount: 2 },
+  ],
+  "cam-011": [
+    { id: "act-011-1", cameraId: "cam-011", timestamp: "2026-02-06T14:45:00Z", type: "person_entry", description: "Staff entering annex building", confidence: 97, personCount: 3, zone: "Zone C" },
+    { id: "act-011-2", cameraId: "cam-011", timestamp: "2026-02-06T13:30:00Z", type: "person_exit", description: "Staff departure for break", confidence: 96, personCount: 2 },
+    { id: "act-011-3", cameraId: "cam-011", timestamp: "2026-02-06T12:00:00Z", type: "system_event", description: "Routine building occupancy check", confidence: 100, zone: "Zone C" },
+  ],
+  "cam-012": [
+    { id: "act-012-1", cameraId: "cam-012", timestamp: "2026-02-06T14:20:00Z", type: "system_event", description: "Generator room - all systems operational", confidence: 99, zone: "Zone D" },
+    { id: "act-012-2", cameraId: "cam-012", timestamp: "2026-02-06T13:00:00Z", type: "person_entry", description: "Maintenance technician conducting inspection", confidence: 98, personCount: 1, faceMatches: ["EMP-0512"] },
+    { id: "act-012-3", cameraId: "cam-012", timestamp: "2026-02-06T11:30:00Z", type: "system_event", description: "Power load test completed successfully", confidence: 100, zone: "Zone D" },
+  ],
+}
