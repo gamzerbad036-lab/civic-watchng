@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { cameras, incidents, auditLogs } from "@/lib/mock-data"
+import { cameras, incidents } from "@/lib/mock-data"
 import { securitySectors } from "@/lib/sector-data"
 import { vehicleTrackingRecords } from "@/lib/detection-engine"
 import { Video, AlertTriangle, ShieldCheck, FileText, Car, Building2 } from "lucide-react"
