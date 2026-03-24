@@ -2,8 +2,12 @@
 
 import { cn } from "@/lib/utils"
 import { cameras, incidents, auditLogs } from "@/lib/mock-data"
+import { securitySectors } from "@/lib/sector-data"
 import { vehicleTrackingRecords } from "@/lib/detection-engine"
-import { Video, AlertTriangle, ShieldCheck, FileText, Car } from "lucide-react"
+import { Video, AlertTriangle, ShieldCheck, FileText, Car, Building2 } from "lucide-react"
+
+// Count unique sectors with deployed cameras
+const activeSectors = new Set(cameras.filter(c => c.sector).map(c => c.sector)).size
 
 const stats = [
   {
@@ -13,6 +17,14 @@ const stats = [
     icon: Video,
     color: "text-emerald-400",
     bgColor: "bg-emerald-500/10",
+  },
+  {
+    label: "Security Sectors",
+    value: activeSectors,
+    total: securitySectors.length,
+    icon: Building2,
+    color: "text-primary",
+    bgColor: "bg-primary/10",
   },
   {
     label: "Active Incidents",
@@ -37,14 +49,6 @@ const stats = [
     icon: ShieldCheck,
     color: "text-emerald-400",
     bgColor: "bg-emerald-500/10",
-  },
-  {
-    label: "Audit Actions",
-    value: auditLogs.length,
-    total: null,
-    icon: FileText,
-    color: "text-sky-400",
-    bgColor: "bg-sky-500/10",
   },
 ]
 

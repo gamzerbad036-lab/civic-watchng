@@ -8,10 +8,11 @@ import { Dashboard } from "@/components/dashboard"
 import { InvestigationPanel } from "@/components/investigation-panel"
 import { AuditLogPanel } from "@/components/audit-log-panel"
 import { CompliancePanel } from "@/components/compliance-panel"
+import { SectorPanel } from "@/components/sector-panel"
 import { CheckCircle2, X } from "lucide-react"
 import type { AccessMode } from "@/lib/types"
 
-export type ActiveView = "dashboard" | "investigation" | "audit" | "compliance"
+export type ActiveView = "dashboard" | "sectors" | "investigation" | "audit" | "compliance"
 
 function AuthenticatedApp() {
   const { user } = useAuth()
@@ -39,6 +40,7 @@ function AuthenticatedApp() {
       />
       <main className="flex-1 overflow-auto">
         {activeView === "dashboard" && <Dashboard accessMode={accessMode} />}
+        {activeView === "sectors" && <SectorPanel />}
         {activeView === "investigation" && (
           <InvestigationPanel accessMode={accessMode} onModeChange={setAccessMode} />
         )}

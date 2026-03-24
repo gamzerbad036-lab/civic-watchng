@@ -1,27 +1,65 @@
 import type { Camera, Incident, AuditLogEntry, RevealRequest, CameraActivity } from "./types"
 
+// Cameras deployed across multiple Nigerian security sectors
+// Each camera simulates deployment in a specific sector context
 export const cameras: Camera[] = [
-  { id: "cam-001", name: "Main Gate A", location: "North Entrance", status: "online", lat: 9.0579, lng: 7.4951, zone: "Zone A" },
-  { id: "cam-002", name: "Parking Lot B", location: "East Wing", status: "online", lat: 9.0585, lng: 7.4960, zone: "Zone A" },
-  { id: "cam-003", name: "Building Entrance", location: "Front Courtyard", status: "online", lat: 9.0570, lng: 7.4945, zone: "Zone B" },
-  { id: "cam-004", name: "Walkway B2", location: "Between Buildings", status: "maintenance", lat: 9.0575, lng: 7.4938, zone: "Zone B" },
-  { id: "cam-005", name: "Utility Enclosure", location: "Rear Compound", status: "online", lat: 9.0568, lng: 7.4955, zone: "Zone C" },
-  { id: "cam-006", name: "Perimeter South", location: "South Fence", status: "online", lat: 9.0560, lng: 7.4948, zone: "Zone C" },
-  { id: "cam-007", name: "Emergency Exit C", location: "West Wing", status: "offline", lat: 9.0582, lng: 7.4935, zone: "Zone D" },
-  { id: "cam-008", name: "Rooftop Array", location: "Building Top", status: "online", lat: 9.0590, lng: 7.4942, zone: "Zone D" },
-  { id: "cam-009", name: "Loading Bay", location: "Rear Entrance", status: "online", lat: 9.0565, lng: 7.4965, zone: "Zone A" },
-  { id: "cam-010", name: "Visitor Pavilion", location: "Front Yard", status: "online", lat: 9.0573, lng: 7.4952, zone: "Zone B" },
-  { id: "cam-011", name: "Staff Quarters", location: "Annex Exterior", status: "online", lat: 9.0555, lng: 7.4940, zone: "Zone C" },
-  { id: "cam-012", name: "Generator Yard", location: "Utility Compound", status: "online", lat: 9.0562, lng: 7.4930, zone: "Zone D" },
+  // Nigerian Police Force (NPF) - Police Command HQ
+  { id: "cam-001", name: "Main Gate A", location: "Police Command HQ - North Entrance", status: "online", lat: 9.0579, lng: 7.4951, zone: "Zone A", sector: "npf", sectorDeployment: "Force Headquarters Entry Checkpoint" },
+  { id: "cam-002", name: "Parking Lot B", location: "Police Command HQ - Vehicle Bay", status: "online", lat: 9.0585, lng: 7.4960, zone: "Zone A", sector: "npf", sectorDeployment: "Official Vehicle Monitoring Area" },
+  
+  // Nigeria Immigration Service (NIS) - Airport Terminal
+  { id: "cam-003", name: "Immigration Checkpoint", location: "Nnamdi Azikiwe Intl - Arrival Hall", status: "online", lat: 9.0570, lng: 7.4945, zone: "Zone B", sector: "nis", sectorDeployment: "Passport Control & Biometric Verification" },
+  { id: "cam-004", name: "Departure Corridor", location: "Nnamdi Azikiwe Intl - Terminal 2", status: "maintenance", lat: 9.0575, lng: 7.4938, zone: "Zone B", sector: "nis", sectorDeployment: "Pre-departure Security Screening" },
+  
+  // Nigeria Security & Civil Defence Corps (NSCDC) - Pipeline Facility
+  { id: "cam-005", name: "Pipeline Junction", location: "NNPC Pipeline - Kaduna Sector", status: "online", lat: 9.0568, lng: 7.4955, zone: "Zone C", sector: "nscdc", sectorDeployment: "Critical Infrastructure Monitoring" },
+  { id: "cam-006", name: "Perimeter Fence", location: "NNPC Depot - South Boundary", status: "online", lat: 9.0560, lng: 7.4948, zone: "Zone C", sector: "nscdc", sectorDeployment: "Intrusion Detection Zone" },
+  
+  // Federal Road Safety Corps (FRSC) - Highway Station
+  { id: "cam-007", name: "Highway Checkpoint", location: "Abuja-Kaduna Expressway - Km 45", status: "offline", lat: 9.0582, lng: 7.4935, zone: "Zone D", sector: "frsc", sectorDeployment: "Traffic Monitoring & Speed Detection" },
+  { id: "cam-008", name: "Toll Plaza Overview", location: "Kubwa Toll Gate - Outbound", status: "online", lat: 9.0590, lng: 7.4942, zone: "Zone D", sector: "frsc", sectorDeployment: "License Plate Recognition Station" },
+  
+  // Nigeria Customs Service (NCS) - Cargo Terminal
+  { id: "cam-009", name: "Cargo Inspection Bay", location: "Apapa Port - Container Terminal", status: "online", lat: 9.0565, lng: 7.4965, zone: "Zone A", sector: "customs", sectorDeployment: "Import Cargo Examination Area" },
+  
+  // Economic & Financial Crimes Commission (EFCC) - Operations Center
+  { id: "cam-010", name: "Evidence Holding", location: "EFCC Zonal Office - Secure Area", status: "online", lat: 9.0573, lng: 7.4952, zone: "Zone B", sector: "efcc", sectorDeployment: "Asset Recovery & Evidence Storage" },
+  
+  // Department of State Services (DSS) - Secure Facility
+  { id: "cam-011", name: "VIP Compound", location: "DSS Facility - Protected Zone", status: "online", lat: 9.0555, lng: 7.4940, zone: "Zone C", sector: "dss", sectorDeployment: "High-Value Target Protection" },
+  
+  // Nigerian Correctional Service (NCoS) - Correctional Center
+  { id: "cam-012", name: "Exercise Yard", location: "Kuje Correctional Center - Outdoor", status: "online", lat: 9.0562, lng: 7.4930, zone: "Zone D", sector: "correctional", sectorDeployment: "Inmate Movement Monitoring" },
 ]
 
+// Sector-specific incidents demonstrating unique operational scenarios
 export const incidents: Incident[] = [
-  { id: "inc-001", type: "motion", severity: "low", cameraId: "cam-001", cameraName: "Main Gate A", description: "Unusual motion detected near entrance after hours", timestamp: "2026-02-06T14:23:00Z", status: "active" },
-  { id: "inc-002", type: "anomaly", severity: "high", cameraId: "cam-005", cameraName: "Utility Enclosure", description: "Anomalous activity in restricted utility area", timestamp: "2026-02-06T13:45:00Z", status: "active" },
-  { id: "inc-003", type: "intrusion", severity: "critical", cameraId: "cam-006", cameraName: "Perimeter South", description: "Perimeter breach detected at south fence line", timestamp: "2026-02-06T12:30:00Z", status: "acknowledged" },
-  { id: "inc-004", type: "system", severity: "medium", cameraId: "cam-007", cameraName: "Emergency Exit C", description: "Camera feed interruption - possible tampering", timestamp: "2026-02-06T11:15:00Z", status: "active" },
-  { id: "inc-005", type: "motion", severity: "low", cameraId: "cam-009", cameraName: "Loading Bay", description: "Scheduled delivery vehicle arrived", timestamp: "2026-02-06T10:00:00Z", status: "resolved" },
-  { id: "inc-006", type: "anomaly", severity: "medium", cameraId: "cam-003", cameraName: "Building Entrance", description: "Unidentified package left near entrance courtyard", timestamp: "2026-02-06T09:30:00Z", status: "acknowledged" },
+  // NPF - Police Command
+  { id: "inc-001", type: "motion", severity: "low", cameraId: "cam-001", cameraName: "Main Gate A", description: "Unauthorized vehicle approach to Police HQ gate - identity verification in progress", timestamp: "2026-02-06T14:23:00Z", status: "active", sector: "npf", sectorProtocol: "NPF-SEC-101: Facility Access Control" },
+  
+  // NSCDC - Pipeline Security
+  { id: "inc-002", type: "anomaly", severity: "high", cameraId: "cam-005", cameraName: "Pipeline Junction", description: "Suspicious activity detected near pipeline valve - potential vandalism attempt", timestamp: "2026-02-06T13:45:00Z", status: "active", sector: "nscdc", sectorProtocol: "NSCDC-CIP-003: Critical Infrastructure Protection" },
+  
+  // NSCDC - Perimeter Breach
+  { id: "inc-003", type: "intrusion", severity: "critical", cameraId: "cam-006", cameraName: "Perimeter Fence", description: "Perimeter breach at NNPC depot fence - rapid response team dispatched", timestamp: "2026-02-06T12:30:00Z", status: "acknowledged", sector: "nscdc", sectorProtocol: "NSCDC-INT-001: Intrusion Response Protocol" },
+  
+  // FRSC - Highway Monitoring
+  { id: "inc-004", type: "system", severity: "medium", cameraId: "cam-007", cameraName: "Highway Checkpoint", description: "Camera feed interruption on Abuja-Kaduna highway - maintenance crew en route", timestamp: "2026-02-06T11:15:00Z", status: "active", sector: "frsc", sectorProtocol: "FRSC-OPS-205: Equipment Maintenance Alert" },
+  
+  // Customs - Cargo Monitoring
+  { id: "inc-005", type: "motion", severity: "low", cameraId: "cam-009", cameraName: "Cargo Inspection Bay", description: "Scheduled container shipment arrived at Apapa port - manifest verification in progress", timestamp: "2026-02-06T10:00:00Z", status: "resolved", sector: "customs", sectorProtocol: "NCS-IMP-012: Import Cargo Processing" },
+  
+  // NIS - Immigration Alert
+  { id: "inc-006", type: "anomaly", severity: "medium", cameraId: "cam-003", cameraName: "Immigration Checkpoint", description: "Watchlist match flagged at airport immigration - traveler detained for verification", timestamp: "2026-02-06T09:30:00Z", status: "acknowledged", sector: "nis", sectorProtocol: "NIS-BDR-007: Watchlist Screening Protocol" },
+  
+  // EFCC - Financial Crime Investigation
+  { id: "inc-007", type: "anomaly", severity: "high", cameraId: "cam-010", cameraName: "Evidence Holding", description: "Suspect vehicle linked to money laundering case detected in vicinity", timestamp: "2026-02-06T08:15:00Z", status: "active", sector: "efcc", sectorProtocol: "EFCC-INV-015: Suspect Tracking Protocol" },
+  
+  // DSS - VIP Protection
+  { id: "inc-008", type: "motion", severity: "critical", cameraId: "cam-011", cameraName: "VIP Compound", description: "Unscheduled approach to protected zone - counter-surveillance activated", timestamp: "2026-02-06T07:45:00Z", status: "acknowledged", sector: "dss", sectorProtocol: "DSS-VIP-001: Protective Intelligence Response" },
+  
+  // Correctional - Facility Security
+  { id: "inc-009", type: "anomaly", severity: "high", cameraId: "cam-012", cameraName: "Exercise Yard", description: "Unusual congregation detected in yard area - guards alerted", timestamp: "2026-02-06T06:30:00Z", status: "active", sector: "correctional", sectorProtocol: "NCoS-SEC-008: Behavioral Anomaly Response" },
 ]
 
 export const auditLogs: AuditLogEntry[] = [

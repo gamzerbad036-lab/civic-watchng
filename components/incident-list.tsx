@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils"
 import { incidents } from "@/lib/mock-data"
+import { getSectorById } from "@/lib/sector-data"
 import { Badge } from "@/components/ui/badge"
 import { AlertTriangle, Activity, ShieldAlert, Monitor } from "lucide-react"
 
@@ -55,6 +56,19 @@ export function IncidentList() {
                 <Badge variant="outline" className={cn("px-1.5 py-0 text-[10px]", severityStyles[incident.severity])}>
                   {incident.severity.toUpperCase()}
                 </Badge>
+                {incident.sector && (
+                  <Badge 
+                    variant="outline" 
+                    className="px-1.5 py-0 text-[10px]"
+                    style={{ 
+                      backgroundColor: `${getSectorById(incident.sector)?.color || '#6b7280'}15`,
+                      borderColor: `${getSectorById(incident.sector)?.color || '#6b7280'}40`,
+                      color: getSectorById(incident.sector)?.color || '#6b7280'
+                    }}
+                  >
+                    {getSectorById(incident.sector)?.shortName}
+                  </Badge>
+                )}
                 <span className="text-[10px] text-muted-foreground">{incident.cameraName}</span>
                 <span className="text-[10px] text-muted-foreground">
                   {time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
@@ -64,6 +78,11 @@ export function IncidentList() {
                   <span className="text-[10px] text-muted-foreground capitalize">{incident.status}</span>
                 </div>
               </div>
+              {incident.sectorProtocol && (
+                <p className="mt-1.5 text-[10px] text-muted-foreground/70 italic">
+                  Protocol: {incident.sectorProtocol}
+                </p>
+              )}
             </div>
           </div>
         )
