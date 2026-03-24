@@ -1,15 +1,16 @@
 "use client"
 
 import { useState } from "react"
-import type { AccessMode } from "@/lib/types"
+import type { AccessMode, SecuritySector } from "@/lib/types"
 import { cameras } from "@/lib/mock-data"
+import { securitySectors } from "@/lib/sector-data"
 import { CameraFeed } from "@/components/camera-feed"
 import { CameraMap } from "@/components/camera-map"
 import { IncidentList } from "@/components/incident-list"
 import { StatsCards } from "@/components/stats-cards"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Shield, Grid3X3, Map, Bell } from "lucide-react"
+import { Shield, Grid3X3, Map, Bell, Building2 } from "lucide-react"
 
 interface DashboardProps {
   accessMode: AccessMode
@@ -17,10 +18,13 @@ interface DashboardProps {
 
 export function Dashboard({ accessMode }: DashboardProps) {
   const [zoneFilter, setZoneFilter] = useState<string>("all")
+  const [sectorFilter, setSectorFilter] = useState<string>("all")
 
-  const filteredCameras = zoneFilter === "all"
-    ? cameras
-    : cameras.filter((c) => c.zone === zoneFilter)
+  const filteredCameras = cameras.filter((c) => {
+    const zoneMatch = zoneFilter === "all" || c.zone === zoneFilter
+    const sectorMatch = sectorFilter === "all" || c.sector === sectorFilter
+    return zoneMatch && sectorMatch
+  })
 
   const zones = Array.from(new Set(cameras.map((c) => c.zone)))
 
@@ -34,11 +38,23 @@ export function Dashboard({ accessMode }: DashboardProps) {
             Real-time monitoring with privacy protection enabled
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
           <div className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2">
             <Shield className="h-4 w-4 text-primary" />
             <span className="text-xs font-medium text-primary">Privacy Shield Active</span>
           </div>
+          <Select value={sectorFilter} onValueChange={setSectorFilter}>
+            <SelectTrigger className="w-36 h-9 text-xs bg-card">
+              <Building2 className="h-3.5 w-3.5 mr-1.5 text-muted-foreground" />
+              <SelectValue placeholder="All Sectors" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Sectors</SelectItem>
+              {securitySectors.map((sector) => (
+                <SelectItem key={sector.id} value={sector.id}>{sector.shortName}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Select value={zoneFilter} onValueChange={setZoneFilter}>
             <SelectTrigger className="w-32 h-9 text-xs bg-card">
               <SelectValue placeholder="All Zones" />

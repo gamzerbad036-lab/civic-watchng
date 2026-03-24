@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import type { Camera } from "@/lib/types"
+import { getSectorById } from "@/lib/sector-data"
 import { cameraDetections, getCameraDetectionSummary } from "@/lib/detection-engine"
 import type { DetectedObject } from "@/lib/detection-engine"
 import { cn } from "@/lib/utils"
@@ -16,7 +17,7 @@ const cameraImageMap: Record<string, string> = {
   "cam-004": "/cameras/cam-004.jpg",
   "cam-005": "/cameras/cam-005.jpg",
   "cam-006": "/cameras/cam-006.jpg",
-  "cam-007": "/cameras/cam-001.jpg",
+  "cam-007": "/cameras/cam-007.jpg",
   "cam-008": "/cameras/cam-008.jpg",
   "cam-009": "/cameras/cam-009.jpg",
   "cam-010": "/cameras/cam-010.jpg",
@@ -380,8 +381,23 @@ export function CameraFeed({ camera, masked = true, className }: CameraFeedProps
 
       {/* Footer */}
       <div className="flex items-center justify-between border-t border-border px-3 py-1.5">
-        <span className="text-[11px] text-muted-foreground">{camera.location}</span>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 min-w-0">
+          {camera.sector && (
+            <Badge 
+              variant="outline" 
+              className="shrink-0 px-1.5 py-0 text-[9px] font-semibold"
+              style={{ 
+                backgroundColor: `${getSectorById(camera.sector)?.color || '#6b7280'}15`,
+                borderColor: `${getSectorById(camera.sector)?.color || '#6b7280'}40`,
+                color: getSectorById(camera.sector)?.color || '#6b7280'
+              }}
+            >
+              {getSectorById(camera.sector)?.shortName}
+            </Badge>
+          )}
+          <span className="text-[10px] text-muted-foreground truncate">{camera.location}</span>
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
           {summary.persons > 0 && (
             <div className="flex items-center gap-1 rounded bg-secondary px-1.5 py-0.5">
               <Users className="h-2.5 w-2.5 text-blue-400" />

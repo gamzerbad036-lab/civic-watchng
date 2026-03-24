@@ -20,11 +20,13 @@ import {
   Radio,
   LogOut,
   UserCircle,
+  Building2,
 } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 const navItems: { id: ActiveView; label: string; icon: React.ElementType }[] = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { id: "sectors", label: "Sectors", icon: Building2 },
   { id: "investigation", label: "Investigation", icon: Search },
   { id: "audit", label: "Audit Logs", icon: FileText },
   { id: "compliance", label: "Compliance", icon: ShieldCheck },
