@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import type { AccessMode, SecuritySector } from "@/lib/types"
+import type { AccessMode } from "@/lib/types"
 import { cameras } from "@/lib/mock-data"
 import { securitySectors } from "@/lib/sector-data"
 import { CameraFeed } from "@/components/camera-feed"
